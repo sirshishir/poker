@@ -1,0 +1,32 @@
+# Unity
+Library/
+Temp/
+Logs/
+UserSettings/
+*.csproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+obj/
+Build/
+Builds/
+.vs/
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+.venv
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,146 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="PokerLobby.uss" />
+
+    <ui:VisualElement name="lobby-root" class="lobby-root">
+        <ui:VisualElement name="lobby-stage" class="lobby-stage">
+
+            <ui:VisualElement name="lobby-panel" class="lobby-panel" style="position: relative;">
+
+                <ui:VisualElement class="panel-topbar" />
+
+                <ui:VisualElement class="panel-inner">
+
+                    <!-- ── Header ─────────────────────────────────── -->
+                    <ui:VisualElement class="lobby-header">
+                        <ui:VisualElement class="lobby-suit-row">
+                            <ui:Label class="lobby-suit lobby-suit--blk" text="&#9824;" />
+                            <ui:Label class="lobby-suit lobby-suit--red" text="&#9829;" />
+                            <ui:Label class="lobby-suit lobby-suit--red" text="&#9830;" />
+                            <ui:Label class="lobby-suit lobby-suit--blk" text="&#9827;" />
+                        </ui:VisualElement>
+                        <ui:Label class="lobby-title" text="TEXAS HOLD&#39;EM" />
+                        <ui:Label class="lobby-subtitle" text="Poker Night" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="panel-divider" />
+
+                    <!-- ── Tabs ───────────────────────────────────── -->
+                    <ui:VisualElement class="lobby-tabs">
+                        <ui:Button name="tab-create" class="lobby-tab lobby-tab--active" text="Create" />
+                        <ui:Button name="tab-join"   class="lobby-tab"                   text="Join"   />
+                        <ui:Button name="tab-bots"   class="lobby-tab"                   text="vs Bots"/>
+                    </ui:VisualElement>
+
+                    <!-- ── CREATE tab ─────────────────────────────── -->
+                    <ui:VisualElement name="content-create">
+                        <ui:VisualElement class="field-group">
+                            <ui:VisualElement class="field-wrap">
+                                <ui:Label class="field-label" text="YOUR NAME" />
+                                <ui:TextField name="name-input-create" class="field-input"
+                                              placeholder-text="Enter your name" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="field-wrap">
+                                <ui:Label class="field-label" text="BUY-IN CHIPS" />
+                                <ui:VisualElement class="buyin-wrap">
+                                    <ui:VisualElement class="buyin-chip-icon" />
+                                    <ui:TextField name="buyin-input-create" class="field-input"
+                                                  value="1000" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="lobby-action-buttons">
+                            <ui:Button name="create-btn" class="lobby-btn lobby-btn--create"
+                                       text="CREATE NEW ROOM" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <!-- ── JOIN tab ───────────────────────────────── -->
+                    <ui:VisualElement name="content-join" style="display: none;">
+                        <ui:VisualElement class="field-group">
+                            <ui:VisualElement class="field-wrap">
+                                <ui:Label class="field-label" text="YOUR NAME" />
+                                <ui:TextField name="name-input-join" class="field-input"
+                                              placeholder-text="Enter your name" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="field-wrap">
+                                <ui:Label class="field-label" text="ROOM CODE" />
+                                <ui:TextField name="room-code-input"
+                                              class="field-input field-input--code"
+                                              placeholder-text="XXXXXX"
+                                              max-length="6" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="field-wrap">
+                                <ui:Label class="field-label" text="BUY-IN CHIPS" />
+                                <ui:VisualElement class="buyin-wrap">
+                                    <ui:VisualElement class="buyin-chip-icon" />
+                                    <ui:TextField name="buyin-input-join" class="field-input"
+                                                  value="1000" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="lobby-action-buttons">
+                            <ui:Button name="join-btn" class="lobby-btn lobby-btn--join"
+                                       text="JOIN ROOM" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <!-- ── vs BOTS tab ────────────────────────────── -->
+                    <ui:VisualElement name="content-bots" style="display: none;">
+                        <ui:VisualElement class="field-group">
+                            <ui:VisualElement class="field-wrap">
+                                <ui:Label class="field-label" text="YOUR NAME" />
+                                <ui:TextField name="name-input-bots" class="field-input"
+                                              placeholder-text="Enter your name" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="field-wrap">
+                                <ui:Label class="field-label" text="BUY-IN CHIPS" />
+                                <ui:VisualElement class="buyin-wrap">
+                                    <ui:VisualElement class="buyin-chip-icon" />
+                                    <ui:TextField name="buyin-input-bots" class="field-input"
+                                                  value="1000" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="bots-row">
+                                <ui:Label class="bots-label" text="NUMBER OF BOTS" />
+                                <ui:VisualElement class="bots-stepper">
+                                    <ui:Button name="bots-dec" class="bots-btn" text="&#8722;" />
+                                    <ui:Label  name="bots-count" class="bots-count" text="3" />
+                                    <ui:Button name="bots-inc" class="bots-btn" text="+" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="lobby-action-buttons">
+                            <ui:Button name="bots-play-btn" class="lobby-btn lobby-btn--bots"
+                                       text="PLAY VS BOTS" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <!-- ── WAITING ROOM ───────────────────────────── -->
+                    <ui:VisualElement name="content-waiting" class="waiting-overlay"
+                                      style="display: none;">
+                        <ui:VisualElement name="waiting-spinner" class="waiting-spinner" />
+                        <ui:Label class="waiting-title" text="ROOM CREATED" />
+                        <ui:Label name="waiting-code"  class="waiting-code"  text="------" />
+                        <ui:Label class="waiting-sub"
+                                  text="Share this code with friends" />
+                        <ui:VisualElement name="waiting-players-row"
+                                          class="waiting-players-row" />
+                        <ui:Label name="waiting-count" class="waiting-count"
+                                  text="0 / 6 players joined" />
+                        <ui:Button name="cancel-link" class="cancel-link"
+                                   text="CANCEL ROOM" />
+                    </ui:VisualElement>
+
+                    <!-- ── Status Bar ─────────────────────────────── -->
+                    <ui:VisualElement class="status-bar">
+                        <ui:VisualElement name="status-dot"
+                                          class="status-dot status-dot--offline" />
+                        <ui:Label name="status-label" class="status-text"
+                                  text="Connecting..." />
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,586 @@
+/*
+ * PokerLobby.uss
+ * Unity Style Sheet — Poker Lobby UI
+ * Covers: Panel, Tabs, Form Fields, Action Buttons, Bots Stepper,
+ *         Waiting Room, Status Bar
+ *
+ * Fonts assumed registered in Unity:
+ *   "Rajdhani-Bold"    — room code, amounts, counts
+ *   "Barlow-SemiBold"  — labels, placeholders, status
+ *   "Barlow-Bold"      — button text, tab text, title
+ *
+ * Reference canvas: 1280 × 720 px (16:9)
+ * Background image:  lobby-bg.png  (1280 × 720)
+ *
+ * ───────────────────────────────────────────────────────
+ * DESIGN TOKENS
+ * ───────────────────────────────────────────────────────
+ *   Background           : #060810
+ *   Panel surface        : rgba(14, 12, 38, 0.97)   → #0E0C26 @ 97%
+ *   Panel surface dark   : rgba(8,  7,  24, 0.99)   → #080718 @ 99%
+ *   Border subtle        : rgba(255, 255, 255, 0.09)
+ *   Border purple        : rgba(255, 255, 255, 0.07)
+ *   Border active        : rgba(160, 90, 255, 0.55)
+ *
+ *   Gold top bar         : #F5D060  →  #C47E00  (linear gradient)
+ *   Gold text            : #F5D060
+ *   Gold chip            : #F5C842
+ *
+ *   Accent purple hi     : #C97AFF
+ *   Accent purple lo     : #6B1FFF
+ *   Tab active bg top    : rgba(100, 50, 200, 0.60)
+ *   Tab active bg bot    : rgba(60,  20, 140, 0.80)
+ *
+ *   Text white           : #FFFFFF
+ *   Text name dim        : #DDE0F5
+ *   Text muted           : rgba(140, 130, 180, 0.70)
+ *   Text placeholder     : rgba(130, 120, 170, 0.45)
+ *
+ *   Create button top    : #2D8A3E   bot: #1A5226   text: #7FFFA8
+ *   Join button top      : #1E4F8A   bot: #102A52   text: #7BC4FF
+ *   Bots button top      : #8A3A10   bot: #521F06   text: #FFB86C
+ *
+ *   Status online        : #4DE09A
+ *   Status waiting       : #F5C842
+ *   Status offline       : #FF6060
+ */
+
+
+/* ═══════════════════════════════════════════════════════
+   1. ROOT / STAGE
+   ═══════════════════════════════════════════════════════ */
+
+.lobby-root {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: #060810;
+}
+
+/* 1280×720 canvas, scaled via C# transform.scale = Screen.width / 1280f */
+.lobby-stage {
+    width: 1280px;
+    height: 720px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* backgroundImage set in C# from lobby-bg.png */
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   2. LOBBY PANEL  (glass card, center of screen)
+   ═══════════════════════════════════════════════════════ */
+
+.lobby-panel {
+    position: absolute;
+    width: 400px;
+    /* center via C# style.left = (1280 - 400) / 2, style.top = (720 - panelHeight) / 2 */
+    background-color: rgba(14, 12, 38, 0.97);
+    border-radius: 20px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.09);
+    overflow: hidden;
+    flex-direction: column;
+}
+
+/* Gold gradient top accent bar */
+.panel-topbar {
+    height: 3px;
+    width: 100%;
+    background-color: #D4A820;
+}
+
+.panel-inner {
+    flex-direction: column;
+    padding-top: 28px;
+    padding-bottom: 30px;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   3. PANEL HEADER  (suits · title · subtitle)
+   ═══════════════════════════════════════════════════════ */
+
+.lobby-header {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 22px;
+}
+
+.lobby-suit-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+    opacity: 0.5;
+}
+
+.lobby-suit {
+    font-size: 16px;
+    margin-left: 7px;
+    margin-right: 7px;
+    -unity-text-align: middle-center;
+}
+
+.lobby-suit--red { color: #CC4433; }
+.lobby-suit--blk { color: #8888AA; }
+
+.lobby-title {
+    font-size: 34px;
+    -unity-font-style: bold;
+    letter-spacing: 3px;
+    color: #F5D060;
+    -unity-text-align: middle-center;
+}
+
+.lobby-subtitle {
+    font-size: 12px;
+    -unity-font-style: bold;
+    letter-spacing: 3px;
+    color: rgba(180, 170, 220, 0.50);
+    -unity-text-align: middle-center;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+/* Horizontal divider under header */
+.panel-divider {
+    height: 1px;
+    width: 100%;
+    background-color: rgba(180, 120, 255, 0.14);
+    margin-bottom: 22px;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   4. TABS  (Create / Join / vs Bots)
+   ═══════════════════════════════════════════════════════ */
+
+.lobby-tabs {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-bottom: 22px;
+}
+
+.lobby-tab {
+    flex-grow: 1;
+    height: 34px;
+    border-radius: 8px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgba(150, 140, 190, 0.60);
+    font-size: 12px;
+    -unity-font-style: bold;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    -unity-text-align: middle-center;
+    transition-property: background-color, color;
+    transition-duration: 0.18s;
+}
+
+.lobby-tab:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: rgba(200, 180, 255, 0.80);
+}
+
+.lobby-tab--active {
+    background-color: rgba(70, 30, 160, 0.68);
+    color: #C97AFF;
+    border-width: 0;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   5. FORM FIELDS
+   ═══════════════════════════════════════════════════════ */
+
+.field-group {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.field-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 14px;
+}
+
+.field-label {
+    font-size: 10px;
+    -unity-font-style: bold;
+    letter-spacing: 1.8px;
+    color: rgba(140, 130, 180, 0.70);
+    -unity-text-align: upper-left;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+/* TextField base */
+.field-input {
+    height: 44px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.09);
+    border-radius: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 14px;
+    -unity-font-style: normal;
+    color: #DDE0F5;
+}
+
+/* Unity TextField inner text/input element */
+.field-input > .unity-text-element {
+    color: #DDE0F5;
+    font-size: 14px;
+    -unity-font-style: normal;
+}
+
+/* Placeholder text (Unity 2022+) */
+.field-input > .unity-text-element--placeholder {
+    color: rgba(130, 120, 170, 0.45);
+    -unity-font-style: normal;
+}
+
+/* Focus state */
+.field-input--focused {
+    border-color: rgba(160, 90, 255, 0.55);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Room code field (larger tracking) */
+.field-input--code {
+    font-size: 18px;
+    letter-spacing: 4px;
+    -unity-font-style: bold;
+}
+
+/* Buy-in field: gold chip prefix icon */
+.buyin-wrap {
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+.buyin-chip-icon {
+    position: absolute;
+    left: 14px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color: #C89A20;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.30);
+    z-index: 1;
+}
+
+.buyin-wrap .field-input {
+    padding-left: 40px;
+    flex-grow: 1;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   6. BOTS STEPPER ROW
+   ═══════════════════════════════════════════════════════ */
+
+.bots-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+
+.bots-label {
+    font-size: 11px;
+    -unity-font-style: bold;
+    letter-spacing: 1.5px;
+    color: rgba(140, 130, 180, 0.70);
+    -unity-text-align: middle-left;
+    text-transform: uppercase;
+}
+
+.bots-stepper {
+    flex-direction: row;
+    align-items: stretch;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.10);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.bots-btn {
+    width: 30px;
+    height: 28px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgba(200, 180, 255, 0.70);
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    cursor: link;
+    transition-property: background-color, color;
+    transition-duration: 0.14s;
+}
+
+.bots-btn:hover {
+    background-color: rgba(140, 60, 240, 0.30);
+    color: #D0B8FF;
+}
+
+.bots-count {
+    width: 32px;
+    -unity-text-align: middle-center;
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: #F5C842;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   7. ACTION BUTTONS  (Create / Join / Play vs Bots)
+   ═══════════════════════════════════════════════════════ */
+
+.lobby-action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    margin-top: 4px;
+}
+
+/* Base lobby button */
+.lobby-btn {
+    height: 50px;
+    width: 100%;
+    border-radius: 12px;
+    font-size: 13px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    -unity-text-align: middle-center;
+    margin-bottom: 10px;
+    cursor: link;
+    transition-property: opacity, scale;
+    transition-duration: 0.15s;
+}
+
+.lobby-btn:hover  { opacity: 0.85; }
+.lobby-btn:active { scale: 0.98; }
+
+/* CREATE NEW ROOM — green */
+.lobby-btn--create {
+    background-color: #225C30;
+    border-width: 1px;
+    border-color: rgba(80, 200, 100, 0.40);
+    color: #7FFFA8;
+}
+
+/* JOIN ROOM — blue */
+.lobby-btn--join {
+    background-color: #173C6B;
+    border-width: 1px;
+    border-color: rgba(60, 130, 220, 0.40);
+    color: #7BC4FF;
+}
+
+/* PLAY VS BOTS — orange */
+.lobby-btn--bots {
+    background-color: #6B2C0B;
+    border-width: 1px;
+    border-color: rgba(200, 100, 30, 0.40);
+    color: #FFB86C;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   8. OR DIVIDER
+   ═══════════════════════════════════════════════════════ */
+
+.or-divider {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.or-line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.or-text {
+    font-size: 10px;
+    -unity-font-style: bold;
+    letter-spacing: 1.5px;
+    color: rgba(130, 120, 170, 0.50);
+    -unity-text-align: middle-center;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   9. STATUS BAR
+   ═══════════════════════════════════════════════════════ */
+
+.status-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top-width: 1px;
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 3.5px;
+    margin-right: 7px;
+}
+
+.status-dot--online  { background-color: #4DE09A; }
+.status-dot--waiting { background-color: #F5C842; }
+.status-dot--offline { background-color: #FF6060; }
+
+.status-text {
+    font-size: 11px;
+    -unity-font-style: normal;
+    letter-spacing: 1px;
+    color: rgba(140, 130, 180, 0.65);
+    -unity-text-align: middle-left;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   10. WAITING ROOM STATE
+   ═══════════════════════════════════════════════════════ */
+
+.waiting-overlay {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 24px;
+    padding-bottom: 8px;
+}
+
+/* Spinner ring — rotated in C# Update loop */
+.waiting-spinner {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    border-width: 3px;
+    border-color: rgba(255, 255, 255, 0.08);
+    border-top-color: #C97AFF;
+    margin-bottom: 14px;
+}
+
+.waiting-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    color: #C97AFF;
+    -unity-text-align: middle-center;
+    margin-bottom: 6px;
+}
+
+.waiting-code {
+    font-size: 28px;
+    -unity-font-style: bold;
+    letter-spacing: 6px;
+    color: #F5D060;
+    -unity-text-align: middle-center;
+    margin-bottom: 6px;
+}
+
+.waiting-sub {
+    font-size: 12px;
+    -unity-font-style: normal;
+    letter-spacing: 0.5px;
+    color: rgba(140, 130, 180, 0.60);
+    -unity-text-align: middle-center;
+    margin-bottom: 10px;
+}
+
+.waiting-players-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+/* Player slot dot */
+.waiting-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: rgba(100, 80, 160, 0.40);
+    border-width: 1.5px;
+    border-color: rgba(160, 120, 255, 0.30);
+    margin-left: 4px;
+    margin-right: 4px;
+    transition-property: background-color, border-color;
+    transition-duration: 0.3s;
+}
+
+/* Filled (player joined) */
+.waiting-dot--filled {
+    background-color: #8830EE;
+    border-color: #C97AFF;
+}
+
+.waiting-count {
+    font-size: 12px;
+    -unity-font-style: normal;
+    color: rgba(140, 130, 180, 0.60);
+    -unity-text-align: middle-center;
+    margin-bottom: 10px;
+}
+
+.cancel-link {
+    font-size: 11px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+    color: rgba(140, 130, 180, 0.50);
+    -unity-text-align: middle-center;
+    text-transform: uppercase;
+    cursor: link;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    transition-property: color;
+    transition-duration: 0.15s;
+}
+
+.cancel-link:hover { color: rgba(200, 180, 255, 0.70); }
